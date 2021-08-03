@@ -1,23 +1,26 @@
 package CK235_496640_TRAB_05;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.plaf.DimensionUIResource;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.awt.event.ActionEvent;
-
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextPane;
+import javax.swing.plaf.DimensionUIResource;
 public class Janela extends JFrame {
-
     private JTextPane texto;
     private Container c;
 
     public static void main(String[] args) {
         RandomGaussian gauss = new RandomGaussian();
-        Janela tela = new Janela("Numeros de Gauss",gauss);
-        File Log = gauss.criarlog();
-        Log = RandomGaussian.Sorted(Log);
-        tela.inserirlinha(gauss.lerlog(Log));
+        Janela tela = new Janela("Numeros de Gauss", gauss);
         tela.mostrar();
     }
 
@@ -58,14 +61,21 @@ public class Janela extends JFrame {
         titulo.setBounds(210, 100, 400, 100);
         titulo.setFont(new Font("Arial", Font.PLAIN, 25));
 
-        // botão
+        // botões
+
+        // iniciar
         JButton start_button = new JButton("Gerar Números");
         start_button.setBounds(295, 360, 200, 30);
         start_button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
-                troca(ev, tela_inicial, tela_valores);
+                troca(tela_inicial, tela_valores);
+                File Logg = gauss.criarlog();
+                Logg = RandomGaussian.Sorted(Logg);
+                inserirlinha(gauss.lerlog(Logg));
             }
         });
+
+        // sair
         JButton exit_button = new JButton("Sair");
         exit_button.setBounds(295, 390, 200, 30);
         exit_button.addActionListener(new ActionListener() {
@@ -81,53 +91,61 @@ public class Janela extends JFrame {
 
         // 2 - tela das funcionalidades
 
-        // area dos valores
+        // |area dos valores|
+
+        // painel
         JPanel valores = new JPanel();
         valores.setLayout(new BorderLayout());
-        valores.setBorder(BorderFactory.createLineBorder(Color.gray));
         valores.setBounds(50, 50, 310, 220);
 
-        // label dos valores
+        // label
         JLabel t1 = new JLabel("Valores:");
         t1.setBorder(BorderFactory.createEtchedBorder());
 
-        // texto não editável com os valores
+        // texto não editável
         texto = new JTextPane();
         texto.setBorder(BorderFactory.createEtchedBorder());
         texto.setEditable(false);
 
-        valores.add(t1,BorderLayout.NORTH);
-        valores.add(texto,BorderLayout.CENTER);
+        // |area dos botões|
 
-        // area do botões
-
-        // label dos botões
+        // label
         JLabel t2 = new JLabel("Opções:");
-        t2.setBounds(550, 50, 155, 20);
+        t2.setBounds(450, 50, 255, 20);
         t2.setBorder(BorderFactory.createEtchedBorder());
 
-        // botões
-        JButton b1 = new JButton("Regerar valores");
-        JButton b2 = new JButton("Voltar");
-        b1.setBounds(550, 70, 155, 100);
-        b2.setBounds(550, 170, 155, 100);
+        // gerar novos valores
+        JButton b1 = new JButton("Gerar novos valores");
+        b1.setBounds(450, 70, 255, 100);
         b1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                File Log = gauss.criarlog();
-                Log = RandomGaussian.Sorted(Log);
-                inserirlinha(gauss.lerlog(Log));
-            }
-        });
-        b2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ev) {
-                troca(ev, tela_valores, tela_inicial);
+                File Logg = gauss.criarlog();
+                Logg = RandomGaussian.Sorted(Logg);
+                inserirlinha(gauss.lerlog(Logg));
             }
         });
 
-        // adição dos componentes na tela das funcionalidades
+        // voltar
+        JButton b2 = new JButton("Voltar");
+        b2.setBounds(450, 170, 255, 100);
+        b2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ev) {
+                troca(tela_valores, tela_inicial);
+            }
+        });
+
+        // adição dos componentes na tela de funcionalidade
+
+        // do painel maior
         tela_valores.add(valores);
+
+        // do painel de valores
+        valores.add(t1, BorderLayout.NORTH);
+        valores.add(texto, BorderLayout.CENTER);
+
+        // os botões
         tela_valores.add(t2);
         tela_valores.add(b1);
         tela_valores.add(b2);
@@ -139,7 +157,7 @@ public class Janela extends JFrame {
         this.setVisible(true);
     }
 
-    public void troca(ActionEvent ev, JPanel atual, JPanel prox) {
+    public void troca(JPanel atual, JPanel prox) {
         c.remove(atual);
         c.add(prox);
         c.repaint();
