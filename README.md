@@ -1,4 +1,6 @@
 # tecnicas
-Repositorio que guarda todos os meu codigos da cadeira de Tecnicas de programação.
+Repositório que guarda todos os meu códigos da cadeira de Técnicas de programação.
+
 Participantes:
+
     Pedro Igor Azevedo Lásaro
