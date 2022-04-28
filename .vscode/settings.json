@@ -1,5 +1,11 @@
 {
     "cSpell.words": [
         "TRAB"
+    ],
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "C:\\Users\\AuGam\\OneDrive\\Documents\\projects\\tecnicas\\Tecnicas de programação\\CK235_496640_TRAB_05\\lib\\swtgraphics2d.jar",
+        "C:\\Users\\AuGam\\OneDrive\\Documents\\projects\\tecnicas\\Tecnicas de programação\\CK235_496640_TRAB_05\\lib\\jfreechart-1.0.19.jar",
+        "C:\\Users\\AuGam\\OneDrive\\Documents\\projects\\tecnicas\\Tecnicas de programação\\CK235_496640_TRAB_05\\lib\\jcommon-1.0.23.jar"
     ]
 }
