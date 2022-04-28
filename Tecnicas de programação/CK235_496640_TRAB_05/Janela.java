@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.TreeSet;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,13 +15,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.plaf.DimensionUIResource;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.category.DefaultCategoryDataset;
+
 public class Janela extends JFrame {
     private JTextPane texto;
     private Container c;
 
     public static void main(String[] args) {
         RandomGaussian gauss = new RandomGaussian();
-        Janela tela = new Janela("Numeros de Gauss", gauss);
+        Janela tela = new Janela("Números de Gauss", gauss);
         tela.mostrar();
     }
 
@@ -34,7 +40,6 @@ public class Janela extends JFrame {
         this.setSize(max_tam); // Tamanho da janela
         this.setLocationByPlatform(rootPaneCheckingEnabled); // Localização
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Operação de fechar a jane
-        this.setLayout(new BorderLayout());
 
         // Container superior
         c = getContentPane();
@@ -58,7 +63,7 @@ public class Janela extends JFrame {
 
         // titulo
         JLabel titulo = new JLabel("Gerador de número de Gauss");
-        titulo.setBounds(210, 100, 400, 100);
+        titulo.setBounds(220, 110, 400, 100);
         titulo.setFont(new Font("Arial", Font.PLAIN, 25));
 
         // botões
@@ -71,7 +76,9 @@ public class Janela extends JFrame {
                 troca(tela_inicial, tela_valores);
                 File Logg = gauss.criarlog();
                 Logg = RandomGaussian.Sorted(Logg);
+                TreeSet<Double> conjunto = Sort.conjunto;
                 inserirlinha(gauss.lerlog(Logg));
+                criarGrafico(conjunto, gauss, tela_valores);
             }
         });
 
@@ -96,7 +103,7 @@ public class Janela extends JFrame {
         // painel
         JPanel valores = new JPanel();
         valores.setLayout(new BorderLayout());
-        valores.setBounds(50, 50, 310, 220);
+        valores.setBounds(50, 50, 200, 200);
 
         // label
         JLabel t1 = new JLabel("Valores:");
@@ -111,24 +118,26 @@ public class Janela extends JFrame {
 
         // label
         JLabel t2 = new JLabel("Opções:");
-        t2.setBounds(450, 50, 255, 20);
+        t2.setBounds(450, 50, 205, 20);
         t2.setBorder(BorderFactory.createEtchedBorder());
 
         // gerar novos valores
         JButton b1 = new JButton("Gerar novos valores");
-        b1.setBounds(450, 70, 255, 100);
+        b1.setBounds(450, 70, 205, 60);
         b1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 File Logg = gauss.criarlog();
                 Logg = RandomGaussian.Sorted(Logg);
+                TreeSet<Double> conjunto = Sort.conjunto;
                 inserirlinha(gauss.lerlog(Logg));
+                criarGrafico(conjunto, gauss, tela_valores);
             }
         });
 
         // voltar
         JButton b2 = new JButton("Voltar");
-        b2.setBounds(450, 170, 255, 100);
+        b2.setBounds(450, 130, 205, 60);
         b2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev) {
@@ -166,4 +175,31 @@ public class Janela extends JFrame {
     public void inserirlinha(String linha) {
         texto.setText(linha);
     }
+
+    public double pdf(double x, Double mean, double variance){
+        double base = 1/Math.sqrt(2*Math.PI*variance);
+        double pow = -(Math.pow((x-mean), 2)/2*variance);
+        return Math.pow(base, pow);}
+
+    public void criarGrafico(TreeSet<Double> conjunto,RandomGaussian gauss,JPanel tela){
+            Double mean = RandomGaussian.MEAN;
+            Double variance = RandomGaussian.VARIANCE;
+            TreeSet<Double> dados = new TreeSet<>();
+            for (Double d : conjunto) {
+                d = pdf(d,mean,variance);
+                System.out.println(d);
+                dados.add(d);
+            }
+            DefaultCategoryDataset linha = new DefaultCategoryDataset();
+            for (double d : dados) {
+                linha.setValue(d, " ", " ");
+            }
+
+            JFreeChart grafico = ChartFactory.createLineChart("pdf", mean.toString(), variance.toString(), linha);
+            ChartPanel painel = new ChartPanel(grafico);
+            painel.setBounds(50,300,400,200);
+            tela.add(painel);
+        }
+
+
 }

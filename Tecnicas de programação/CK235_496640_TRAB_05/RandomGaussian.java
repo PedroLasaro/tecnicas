@@ -17,8 +17,11 @@ public class RandomGaussian extends Sort {
         System.out.println(g.lerlog(Log));
     }
 
-    private static double MEAN = 100.0f;
-    private static double VARIANCE = 5.0f;
+    static double MEAN = 100.0f;
+    static double VARIANCE = 5.0f;
+    public RandomGaussian() {
+    }
+
     private static Random fRandom = new Random(); // número aleatório
 
     private static double getGaussian() {

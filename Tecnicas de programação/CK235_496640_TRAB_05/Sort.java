@@ -10,12 +10,13 @@ import java.io.BufferedReader;
 import java.util.TreeSet;
 
 public class Sort {
+    static TreeSet<Double> conjunto;
     protected static File Sorted(File arquivo) {
         try {
             // leitura
             Reader r = new FileReader(arquivo);
             BufferedReader br = new BufferedReader(r);
-            TreeSet<Double> conjunto = new TreeSet<Double>(); // TreeSet de Doubles para guardar os valores
+            conjunto = new TreeSet<Double>(); // TreeSet de Doubles para guardar os valores
             String line;
             while ((line = br.readLine()) != null) // leitor lendo as linhas e adicionando no conjunto
             {
